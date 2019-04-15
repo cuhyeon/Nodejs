@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>메모</title>
+</head>
+
+
+<body>
+    
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;나의메모</h5>
+    	<form method="post" action="/process/memo">
+        <table>
+            <tr>
+                <td><label>작 성 자&nbsp;</label></td>
+                <td><input type="text" name="preparing" /></td>
+            </tr>
+            <tr>
+                <td><label>작성일시</label></td>
+                <td>
+                    <input type="datetime-local" id='ptime' value='yyyy-MM-ddThh:mm:ss' />
+                </td>
+            </tr>
+            <tr>
+                <td width="0%">메모</td>
+                <td width="0%">
+                    <textarea name="memo" cols="30" >          </textarea>
+                </td>
+        </table>
+        <input type="submit" value="저장" name="" />
+        <input type="reset" value="닫기"/>
+    </form>
+</body>
+
+</html>
