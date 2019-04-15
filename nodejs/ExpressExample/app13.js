@@ -1,17 +1,18 @@
 /*jslint devel: true */
-/* eslint-disable no-console */
+/*eslint-disable no-console */
 /*eslint no-undef: "error"*/
 /*eslint-env node*/
 
 // Express 기본 모듈 불러오기
-var express = require('express')
-  , http = require('http')
+var express = require('express') // 모듈 가져오기
+  , http = require('http')  //익스프레스의 기반이 되는 부품
   , path = require('path');
 
-// Express의 미들웨어 불러오기
-var bodyParser = require('body-parser')
-  , cookieParser = require('cookie-parser')
-  , static = require('serve-static')
+// Express의 미들웨어 불러오기 (미들웨어 : 구조내에서 중간 처리를 위한 함수)
+// 요청이 발생했을 때 미들웨어 함수 실행, 응답 후 미들웨어 함수 죽음
+var bodyParser = require('body-parser') //req.body는 bodyParser모듈이 없는 디폴트값인 Undefined만 출력
+  , cookieParser = require('cookie-parser') //요청된 쿠키를 쉽게 추출하도록 해주는 모듈(쿠키 값 확인 용도)
+  , static = require('serve-static') //특정 폴더의 파일들을 특정패스로 접근할 수 있도록 만들어 주는 미들웨어
   , errorHandler = require('errorhandler');
 
 // 에러 핸들러 모듈 사용
