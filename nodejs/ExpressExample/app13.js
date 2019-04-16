@@ -9,11 +9,12 @@ var express = require('express') // 모듈 가져오기
   , path = require('path');
 
 // Express의 미들웨어 불러오기 (미들웨어 : 구조내에서 중간 처리를 위한 함수)
-// 요청이 발생했을 때 미들웨어 함수 실행, 응답 후 미들웨어 함수 죽음
-var bodyParser = require('body-parser') //req.body는 bodyParser모듈이 없는 디폴트값인 Undefined만 출력
+// 요청이 발생했을 때 미들웨어 함수 실행, 응답 후 미들웨어 함수 죽음?
+var bodyParser = require('body-parser') // bodyParser POST request data의 body를 추출 
+    //req.body는 bodyParser모듈이 없을때는 디폴트값인 Undefined만 출력
   , cookieParser = require('cookie-parser') //요청된 쿠키를 쉽게 추출하도록 해주는 모듈(쿠키 값 확인 용도)
   , static = require('serve-static') //특정 폴더의 파일들을 특정패스로 접근할 수 있도록 만들어 주는 미들웨어
-  , errorHandler = require('errorhandler');
+  , errorHandler = require('errorhandler'); //특정 오류코드에 따라 클라이언트에 응답을 보낼때 미리 만들어 놓은 웹문서로 이동할때 사용
 
 // 에러 핸들러 모듈 사용
 var expressErrorHandler = require('express-error-handler');
@@ -22,19 +23,23 @@ var expressErrorHandler = require('express-error-handler');
 var expressSession = require('express-session');
 
 // 파일 업로드용 미들웨어
-var multer = require('multer');
-var fs = require('fs');
+var multer = require('multer'); // express에 multer모듈 적용 (파일업로드를 위한 모듈)
+var fs = require('fs'); // fs : FileSystem 파일을 다룰때 사용 (파일의 존재 확인 or 생성등등)
 
-//클라이언트에서 ajax로 요청 시 CORS(다중 서버 접속) 지원
+// 클라이언트에서 ajax로 요청 시 CORS(다중 서버 접속(Cross Origin Resource Sharing)) 지원
+// 현재 도메인에서 다른 도메인의 리소스를 요청 하는 경우 Ex)  http://A.com -> http://B.com/image.jpg
 var cors = require('cors');
-
+//보안 상의 이유로, 브라우저는 CORS를 제한하고 있다.
 
 // 익스프레스 객체 생성
 var app = express();
 
-// 기본 속성 설정
-app.set('port', process.env.PORT || 3000);
-app.use(bodyParser.urlencoded({ extended: false }))
+// 기본 속성 설정 // use는 객체를 호출하여 반환되는 객체를 반환
+app.set('port', process.env.PORT || 3000); //app.set(Key, Value) / process.env.PORT 서버의 환경변수
+app.use(bodyParser.urlencoded({ extended: false })) 
+// urlencoded : 자동으로 req에 body속성이 추가되고 저장
+// extended : 중첩된 객체표현을 허용할지 말지를 정하는 것
+// true : 객체 안에 객체를 파싱할 수 있게하려면 반대는 false
 
 // body-parser를 이용해 application/json 파싱
 app.use(bodyParser.json())
@@ -59,20 +64,25 @@ app.use(cors());
 
 
 //multer 미들웨어 사용 : 미들웨어 사용 순서 중요  body-parser -> multer -> router
-// 파일 제한 : 10개, 1G
+    //destination : 업로드한 파일이 저장될 폴더를 지정
+    //filename : 업로드한 파일의 이름을 바꿈
+    //limits : 파일 크기나 파일 개수 등의 제한 속성을 설정하는 객체
+
 var storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, 'uploads')
+        callback(null, 'uploads') // callback 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
     },
     filename: function (req, file, callback) {
-        callback(null, file.originalname + Date.now())
+        callback(null, file.originalname + Date.now()) // callback 콜백함수를 통해 전송된 파일 이름 설정
     }
 });
 
 var upload = multer({ 
     storage: storage,
-    limits: {
-		files: 10,
+    limits: { 
+		// 파일 제한 : 100개, 약 800Mb 
+        files: 100,
+        
 		fileSize: 800 * 800 * 800
 	}
 });
