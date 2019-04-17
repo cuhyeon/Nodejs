@@ -140,7 +140,7 @@ router.route('/process/photo').post(upload.array('photo', 1), function(req, res)
 		
 });
  
-app.use('/', router);
+app.use('/', router);//path 지정하고 app.use로 등록
 
 
 // 404 에러 페이지 처리
